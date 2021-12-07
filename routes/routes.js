@@ -28,6 +28,13 @@ const appRouter = function (app) {
     });
   });
 
+  app.get("/height", async (req, res) => {
+    const response = await axios.get(apiURL("/blocks/latest"));
+    return res.status(200).send({
+      height: response.data.height,
+    });
+  });
+
   app.get("/blocks", async (req, res) => {
     const response = await axios.get(apiURL("/blocks"));
     let blocks = response.data.sort((a, b) => b.height - a.height);
