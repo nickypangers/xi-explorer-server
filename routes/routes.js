@@ -66,6 +66,12 @@ const appRouter = function (app) {
       count,
     });
   });
+
+  app.get("/wallets/:address", async (req, res) => {
+    const address = req.params.address;
+    const response = await axios.get(apiURL(`/wallets/${address}`));
+    return res.status(200).send(response.data);
+  });
 };
 
 module.exports = appRouter;
