@@ -8,7 +8,6 @@ const appRouter = function (app) {
   });
 
   app.get("/transactions/limit/:limit", async (req, res) => {
-    const limit = req.params.limit || 10;
     try {
       const response = await axios.get(apiURL("/blocks"));
       const blocksList = response.data;
@@ -19,6 +18,10 @@ const appRouter = function (app) {
         });
         transactionList.push(...block.transactions);
       });
+
+      const limit =
+        req.params.limit == 0 ? transactionList.length : req.params.limit;
+
       const transactions = transactionList
         .slice(0, limit)
         .sort((a, b) => b.timestamp - a.timestamp);
@@ -102,6 +105,42 @@ const appRouter = function (app) {
       const transaction = transactionResponse.data;
 
       return res.status(200).send(transaction);
+    } catch (e) {
+      return res.status(404).send({
+        message: e.message,
+      });
+    }
+  });
+
+  app.post("/wallets", async (req, res) => {
+    try {
+      const response = await axios.get(apiURL("/wallets"));
+      const wallets = response.data;
+
+      const body = req.body;
+      // page, limit
+      if (Object.keys(body).length === 0) {
+        return res.status(200).send({ wallets });
+      }
+
+      if (body.page < 0) {
+        return res.status(404).send({
+          message: "Page number should be greater than 0",
+        });
+      }
+
+      if (body.limit < 0) {
+        return res.status(404).send({
+          message: "Limit should be greater than 0",
+        });
+      }
+
+      const starting = (body.page - 1) * body.limit;
+      const upToNotInclude = starting + body.limit;
+
+      let walletList = wallets.slice(starting, upToNotInclude);
+
+      return res.status(200).send({ wallets: walletList });
     } catch (e) {
       return res.status(404).send({
         message: e.message,
