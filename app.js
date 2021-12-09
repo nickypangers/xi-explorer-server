@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
-const routes = require("./routes/routes.js");
+// const BlockRoutes = require("./routes/block.route");
+// const WalletRoutes = require("./routes/wallet.route");
+// const TransactionRoutes = require("./routes/transaction.route");
+const routes = require("./routes/routes");
 const cors = require("cors");
 const port = 3030;
 
