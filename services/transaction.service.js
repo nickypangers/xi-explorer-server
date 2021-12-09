@@ -30,7 +30,7 @@ const getTransactions = async (limit) => {
     });
 
     if (!limit || limit === 0) {
-      return transactions;
+      return transactions.sort((a, b) => b.timestamp - a.timestamp);
     }
 
     return transactions
