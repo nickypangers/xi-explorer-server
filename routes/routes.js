@@ -112,6 +112,24 @@ const appRouter = function (app) {
     }
   });
 
+  app.get("/supply", async (req, res) => {
+    try {
+      const walletsResponse = await axios.get(apiURL("/wallets"));
+      const wallets = walletsResponse.data;
+      const supply = wallets
+        .map((wallet) => wallet.balance)
+        .reduce((a, b) => a + b, 0);
+
+      return res.status(200).send({
+        supply,
+      });
+    } catch (e) {
+      return res.status(e).send({
+        message: e.message,
+      });
+    }
+  });
+
   app.post("/wallets", async (req, res) => {
     try {
       const response = await axios.get(apiURL("/wallets"));
