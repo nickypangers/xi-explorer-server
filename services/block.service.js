@@ -31,6 +31,11 @@ const getBlockInfo = async (height) => {
     throw new Error("Block height is required");
   }
   try {
+    const latestBlock = await getLatestBlock();
+    if (height > latestBlock.height) {
+      throw new Error("Block height is invalid");
+    }
+
     const response = await axios.get(constants.apiURL(`/blocks/${height}`));
     let block = response.data;
     return block;
@@ -38,8 +43,6 @@ const getBlockInfo = async (height) => {
     throw new Error(e.message);
   }
 };
-
-
 
 module.exports = {
   getLatestBlock,
