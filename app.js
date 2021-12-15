@@ -5,7 +5,7 @@ const app = express();
 // const TransactionRoutes = require("./routes/transaction.route");
 const routes = require("./routes/routes");
 const cors = require("cors");
-const port = 3030;
+const port = process.env.PORT || 3030;
 
 app.use(cors({ origin: "*" }));
 // app.use(cors({ origin: "http://localhost:3000" }));
